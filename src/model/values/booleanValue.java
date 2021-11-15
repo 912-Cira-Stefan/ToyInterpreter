@@ -7,6 +7,13 @@ public class booleanValue implements myValue{
     public booleanValue(boolean some_bool){
         this.value = some_bool;
     }
+
+    @Override
+    public boolean equals(Object other)
+    {
+        return other instanceof booleanValue;
+    }
+
     public booleanValue(){
         this.value = true;
     }

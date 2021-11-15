@@ -29,6 +29,12 @@ public class Repo implements repoInterface{
         index = 0;
     }
 
+    public Repo(String logFile_path) {
+        this.lst = new OutList<PrgState>();
+        this.logFile_path = logFile_path;
+        index = 0;
+    }
+
     public void add(PrgState p){
         lst.add(p);
     }

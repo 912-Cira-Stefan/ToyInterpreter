@@ -1,4 +1,5 @@
 import controller.controller;
+import model.ADTs.FileTable;
 import model.ADTs.OutList;
 import model.ADTs.SymbolsDict;
 import model.ADTs.executionStack;
@@ -12,14 +13,21 @@ import model.expressions.VarExpr;
 import model.statements.*;
 import model.types.Boolean;
 import model.types.Integer;
+import model.values.StringValue;
 import model.values.booleanValue;
 import model.values.intValue;
 import model.values.myValue;
 import repository.Repo;
+import view.TextClass;
+import view.commands.Command;
+import view.commands.ExitCommand;
 
+import java.io.BufferedReader;
 import java.util.Scanner;
 
 public class main {
+    //TODO create a wrapper for a method that returns a controller -> not hardcoded
+
     static PrgState p1(){
         // ex 1
         // int v; v = 2; Print(v)
@@ -31,9 +39,10 @@ public class main {
                 )
         );
         SymbolsDict<String, myValue> dict = new SymbolsDict<String, myValue>();
+        FileTable<StringValue, BufferedReader> fileTable = new FileTable<StringValue, BufferedReader>();
         OutList<myValue> lst = new OutList<myValue>();
         executionStack<myStatement> stk = new executionStack<myStatement>();
-        return new PrgState(stk, dict, lst, ex1);
+        return new PrgState(stk, dict, fileTable, lst, ex1);
     }
     static PrgState p2(){
         // ex2
@@ -70,9 +79,10 @@ public class main {
                 )
         );
         SymbolsDict<String, myValue> dict = new SymbolsDict<String, myValue>();
+        FileTable<StringValue, BufferedReader> fileTable = new FileTable<StringValue, BufferedReader>();
         OutList<myValue> lst = new OutList<myValue>();
         executionStack<myStatement> stk = new executionStack<myStatement>();
-        return new PrgState(stk, dict, lst, ex2);
+        return new PrgState(stk, dict, fileTable, lst, ex2);
     }
     static PrgState p3(){
         // ex 3
@@ -97,9 +107,10 @@ public class main {
                 )
         );
         SymbolsDict<String, myValue> dict = new SymbolsDict<String, myValue>();
+        FileTable<StringValue, BufferedReader> fileTable = new FileTable<StringValue, BufferedReader>();
         OutList<myValue> lst = new OutList<myValue>();
         executionStack<myStatement> stk = new executionStack<myStatement>();
-        return new PrgState(stk, dict, lst, ex3);
+        return new PrgState(stk, dict, fileTable, lst,  ex3);
     }
     static int print_menu(){
         Scanner keyboard = new Scanner(System.in);
@@ -111,23 +122,46 @@ public class main {
         }
         return myint;
     }
+
+    public static class RunExample extends Command {
+        private final controller control;
+
+        public RunExample(String key, String description, controller controller)
+        {
+            super(key, description);
+            this.control=controller;
+        }
+        @Override
+        public void execute()
+        {
+            try
+            {
+                control.do_all_at_once();
+            }
+            catch(Exception e)
+            {
+                System.out.println(e.toString());
+            }
+        }
+    }
+
     public static void main(String[] args){
-        Repo r = new Repo();
+        String logFilePath = "C:\\Users\\Stefan Cira\\IdeaProjects\\logFile.txt";
+        Repo r = new Repo(logFilePath);
+        Repo r1 = new Repo(logFilePath);
+        Repo r2 = new Repo(logFilePath);
         controller c = new controller(r);
-        int option = print_menu();
-        switch(option){
-            case 1:
-                r.add(p1());
-            case 2:
-                r.add(p2());
-            case 3:
-                r.add(p3());
-        }
-//        r.add(p3());
-        try {
-            c.do_all_at_once();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        controller c1 = new controller(r1);
+        controller c2 = new controller(r2);
+        r.add(p1());
+        r1.add(p2());
+        r2.add(p3());
+        TextClass menu = new TextClass();
+        menu.addCommand(new ExitCommand("0", "exit"));
+        menu.addCommand(new RunExample("1","example0", c));
+        menu.addCommand(new RunExample("2","example1", c1));
+        menu.addCommand(new RunExample("3","example2", c2));
+        menu.show();
+
     }
 }

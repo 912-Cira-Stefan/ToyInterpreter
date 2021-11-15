@@ -10,6 +10,13 @@ public class intValue implements myValue{
         this.value = some_v;
     }
     public intValue(){this.value = 0;}
+
+    @Override
+    public boolean equals(Object other)
+    {
+        return other instanceof intValue;
+    }
+
     public int getValue(){
 
         return this.value;

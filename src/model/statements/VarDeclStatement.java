@@ -26,7 +26,8 @@ public class VarDeclStatement implements myStatement{
         if(symTable.isOkay(name))
             throw new ExecuteException("Symbol " + name + " is already defined");
         else{
-            myValue val;
+            //NOTE - here is the defaultValue()
+            myValue val = type.defaultValue();
             if (type.equals(new Boolean()))
                 val = new booleanValue();
             else if (type.equals(new Integer()))

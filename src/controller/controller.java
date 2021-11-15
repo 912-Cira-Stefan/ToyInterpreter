@@ -9,6 +9,8 @@ import model.statements.myStatement;
 import repository.Repo;
 import repository.repoInterface;
 
+import java.io.IOException;
+
 public class controller implements myController{
     repoInterface repository;
     public controller(Repo r){this.repository = r;}
@@ -24,17 +26,22 @@ public class controller implements myController{
         if(stack.isEmpty())
             throw new ExecuteException("Empty state stack");
         myStatement currentStmt = stack.pop();
-        return currentStmt.execute(state);
+        try{
+            return currentStmt.execute(state);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     public void do_all_at_once() throws ExecuteException, EvalException, ADTexception, Exception {
         repository.clearLog();
         PrgState something = repository.getProgram();
         repository.logPrgState(something);
-        System.out.println(something);
+        //System.out.println(something);
         while (!something.getExecStack().isEmpty()){
             one_at_a_time(something);
             repository.logPrgState(something);
-            System.out.println(something);
+            //System.out.println(something);
         }
     }
 }
