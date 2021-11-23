@@ -64,6 +64,10 @@ public class SymbolsDict<String, myValue> implements myDict <String, myValue>{
         throw new ADTexception("variable name not found");
     }
 
+    public Map<String, myValue> getDict() {
+        return dict;
+    }
+
     public boolean isOkay(String var_name){
         return this.dict.get(var_name) != null;
     }

@@ -30,4 +30,9 @@ public class FileTable<String, myValue> implements myDict<String, myValue>{
     public void update(String var_name, myValue myValue) {
         this.fileTable.put(var_name, myValue);
     }
+
+    @Override
+    public Map<String, myValue> getDict() {
+        return this.fileTable;
+    }
 }

@@ -29,7 +29,7 @@ public class AssigStatement implements myStatement{
         myDict<String, myValue> symbolsDict = state.getSymbolsDict();
 
         if(symbolsDict.isOkay(variableName)){
-            myValue expressionValue = expression.eval(symbolsDict);
+            myValue expressionValue = expression.eval(symbolsDict, state.getHeap());
             myType variableType = symbolsDict.lookup(variableName).getType();
 
             if(expressionValue.getType().equals(variableType)){

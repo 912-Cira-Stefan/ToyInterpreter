@@ -23,7 +23,7 @@ public class closeRFileStatement implements myStatement{
 
     @Override
     public PrgState execute(PrgState state) throws ExecuteException, ADTexception, EvalException, IOException {
-        myValue value = expression.eval(state.getSymbolsDict());
+        myValue value = expression.eval(state.getSymbolsDict(), state.getHeap());
         myType type = value.getType();
         if(type.equals(new StringType()))
         {

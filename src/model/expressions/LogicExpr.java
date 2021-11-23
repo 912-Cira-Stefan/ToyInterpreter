@@ -1,6 +1,7 @@
 package model.expressions;
 
 import model.ADTs.myDict;
+import model.ADTs.myHeap;
 import model.exceptions.ADTexception;
 import model.exceptions.EvalException;
 import model.types.Boolean;
@@ -16,12 +17,12 @@ public class LogicExpr implements myExpression{
     }
 
     @Override
-    public myValue eval(myDict<String, myValue> dict) throws ADTexception, EvalException {
-        myValue value1 = express1.eval(dict);
+    public myValue eval(myDict<String, myValue> dict, myHeap<myValue> heap) throws ADTexception, EvalException {
+        myValue value1 = express1.eval(dict, heap);
         if (!value1.getType().equals(new Boolean()))
             throw new EvalException("invalid boolean operand 1");
 
-        myValue value2 = express2.eval(dict);
+        myValue value2 = express2.eval(dict, heap);
         if (!value2.getType().equals(new Boolean()))
             throw new EvalException("invalid boolean operand 2");
 

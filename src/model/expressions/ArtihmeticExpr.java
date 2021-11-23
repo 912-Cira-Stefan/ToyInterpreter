@@ -1,6 +1,7 @@
 package model.expressions;
 
 import model.ADTs.myDict;
+import model.ADTs.myHeap;
 import model.exceptions.ADTexception;
 import model.exceptions.EvalException;
 import model.types.Integer;
@@ -18,12 +19,12 @@ public class ArtihmeticExpr implements myExpression{
     }
 
     @Override
-    public myValue eval(myDict<String, myValue> dict) throws ADTexception, EvalException {
-        myValue val1 = express1.eval(dict);
+    public myValue eval(myDict<String, myValue> dict, myHeap<myValue> heap) throws ADTexception, EvalException {
+        myValue val1 = express1.eval(dict, heap);
         if(!val1.getType().equals(new Integer()))
             throw new EvalException("First operand NOT an integer");
 
-        myValue val2 = express2.eval(dict);
+        myValue val2 = express2.eval(dict, heap);
         if (!val2.getType().equals(new Integer()))
             throw new EvalException("Second operand NOT an integer");
 

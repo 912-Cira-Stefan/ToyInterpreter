@@ -25,7 +25,7 @@ public class OpenRFile implements myStatement{
 
     @Override
     public PrgState execute(PrgState state) throws IOException, EvalException, ADTexception {
-        myValue value = expression.eval(state.getSymbolsDict());
+        myValue value = expression.eval(state.getSymbolsDict(), state.getHeap());
         myType type = value.getType();
         if(type.equals(new StringType()))
         {

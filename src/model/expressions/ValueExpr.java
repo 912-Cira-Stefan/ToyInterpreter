@@ -1,6 +1,8 @@
 package model.expressions;
 
 import model.ADTs.myDict;
+import model.ADTs.myHeap;
+import model.exceptions.ADTexception;
 import model.exceptions.EvalException;
 import model.values.myValue;
 
@@ -11,10 +13,12 @@ public class ValueExpr implements myExpression{
         this.value = value;
     }
 
-    public myValue eval(myDict<String, myValue> table) throws EvalException {
-        return value;
-    }
     public String toString(){
         return value.toString() + " ";
+    }
+
+    @Override
+    public myValue eval(myDict<String, myValue> dict, myHeap<myValue> heap) throws ADTexception, EvalException {
+        return value;
     }
 }

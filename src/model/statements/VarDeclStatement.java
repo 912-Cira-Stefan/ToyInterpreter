@@ -28,12 +28,6 @@ public class VarDeclStatement implements myStatement{
         else{
             //NOTE - here is the defaultValue()
             myValue val = type.defaultValue();
-            if (type.equals(new Boolean()))
-                val = new booleanValue();
-            else if (type.equals(new Integer()))
-                val = new intValue();
-            else
-                throw new EvalException("Invalid type");
             symTable.update(name, val);
         }
         return state;

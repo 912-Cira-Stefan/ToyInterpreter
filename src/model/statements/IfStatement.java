@@ -35,9 +35,9 @@ public class IfStatement implements myStatement{
         myList<myValue> out = state.getOutput();
         myStack<myStatement> stk = state.getExecStack();
         myDict<String, myValue> symTable = state.getSymbolsDict();
-        if (!expr1.eval(symTable).getType().equals(new Boolean()))
+        if (!expr1.eval(symTable, state.getHeap()).getType().equals(new Boolean()))
             throw new ExecuteException("condtitional expression is not a boolean\n");
-        booleanValue auxbool = (booleanValue) expr1.eval(symTable);
+        booleanValue auxbool = (booleanValue) expr1.eval(symTable, state.getHeap());
         if (auxbool.getValue()){
             stk.push(thenStmt);
         }else{

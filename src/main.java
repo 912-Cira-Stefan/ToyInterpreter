@@ -1,18 +1,15 @@
 import controller.controller;
-import model.ADTs.FileTable;
-import model.ADTs.OutList;
-import model.ADTs.SymbolsDict;
-import model.ADTs.executionStack;
+import model.ADTs.*;
 import model.PrgState;
 import model.exceptions.ADTexception;
 import model.exceptions.EvalException;
 import model.exceptions.ExecuteException;
-import model.expressions.ArtihmeticExpr;
-import model.expressions.ValueExpr;
-import model.expressions.VarExpr;
+import model.expressions.*;
 import model.statements.*;
 import model.types.Boolean;
 import model.types.Integer;
+import model.types.RefType;
+import model.types.StringType;
 import model.values.StringValue;
 import model.values.booleanValue;
 import model.values.intValue;
@@ -40,9 +37,10 @@ public class main {
         );
         SymbolsDict<String, myValue> dict = new SymbolsDict<String, myValue>();
         FileTable<StringValue, BufferedReader> fileTable = new FileTable<StringValue, BufferedReader>();
+        HeapTable<myValue> heap = new HeapTable<myValue>();
         OutList<myValue> lst = new OutList<myValue>();
         executionStack<myStatement> stk = new executionStack<myStatement>();
-        return new PrgState(stk, dict, fileTable, lst, ex1);
+        return new PrgState(stk, dict, heap, fileTable, lst, ex1);
     }
     static PrgState p2(){
         // ex2
@@ -80,9 +78,10 @@ public class main {
         );
         SymbolsDict<String, myValue> dict = new SymbolsDict<String, myValue>();
         FileTable<StringValue, BufferedReader> fileTable = new FileTable<StringValue, BufferedReader>();
+        HeapTable<myValue> heap = new HeapTable<myValue>();
         OutList<myValue> lst = new OutList<myValue>();
         executionStack<myStatement> stk = new executionStack<myStatement>();
-        return new PrgState(stk, dict, fileTable, lst, ex2);
+        return new PrgState(stk, dict, heap, fileTable, lst, ex2);
     }
     static PrgState p3(){
         // ex 3
@@ -108,9 +107,64 @@ public class main {
         );
         SymbolsDict<String, myValue> dict = new SymbolsDict<String, myValue>();
         FileTable<StringValue, BufferedReader> fileTable = new FileTable<StringValue, BufferedReader>();
+        HeapTable<myValue> heap = new HeapTable<myValue>();
         OutList<myValue> lst = new OutList<myValue>();
         executionStack<myStatement> stk = new executionStack<myStatement>();
-        return new PrgState(stk, dict, fileTable, lst,  ex3);
+        return new PrgState(stk, dict, heap, fileTable, lst,  ex3);
+    }
+    static PrgState p4(){
+        myStatement ex4 = new CompdStatement(
+                new VarDeclStatement("varf",new StringType()),new CompdStatement(
+                new AssigStatement("varf",new ValueExpr(new StringValue("test.in"))),new CompdStatement(
+                new OpenRFile(new VarExpr("varf")),new CompdStatement(
+                new VarDeclStatement("varc",new Integer()),new CompdStatement(
+                new readFile(new VarExpr("varf"),"varc"),new CompdStatement(
+                new PrintStatement(new VarExpr("varc")),new CompdStatement(
+                new readFile(new VarExpr("varf"),"varc") ,new CompdStatement(new PrintStatement(new VarExpr("varc")),new closeRFileStatement(new VarExpr("varf"))))))))));
+
+        SymbolsDict<String, myValue> dict = new SymbolsDict<String, myValue>();
+        FileTable<StringValue, BufferedReader> fileTable = new FileTable<StringValue, BufferedReader>();
+        HeapTable<myValue> heap = new HeapTable<myValue>();
+        OutList<myValue> lst = new OutList<myValue>();
+        executionStack<myStatement> stk = new executionStack<myStatement>();
+        return new PrgState(stk, dict, heap, fileTable, lst,  ex4);
+    }
+
+    static PrgState p5(){
+        myStatement ex5 = new CompdStatement(
+                new VarDeclStatement("v",new Integer()),
+                new CompdStatement(
+                        new AssigStatement("v",new ValueExpr(new intValue(10))),
+                        new WhileStatement(
+                                new RelationalExpression(new VarExpr("v"),new ValueExpr(new intValue(0)),">"),
+                                new CompdStatement(new PrintStatement(new VarExpr("v")),
+                                        new AssigStatement( "v",new ArtihmeticExpr(new VarExpr("v"),new ValueExpr(new intValue(1)), '-'))
+                                )
+                        )));
+        SymbolsDict<String, myValue> dict = new SymbolsDict<String, myValue>();
+        FileTable<StringValue, BufferedReader> fileTable = new FileTable<StringValue, BufferedReader>();
+        HeapTable<myValue> heap = new HeapTable<myValue>();
+        OutList<myValue> lst = new OutList<myValue>();
+        executionStack<myStatement> stk = new executionStack<myStatement>();
+        return new PrgState(stk, dict, heap, fileTable, lst,  ex5);
+    }
+    static PrgState p6(){
+        myStatement ex6 = new CompdStatement(
+                new VarDeclStatement("v",new RefType(new Integer())),
+                new CompdStatement(
+                        new NewStatement("v",new ValueExpr(new intValue(20))),
+                        new CompdStatement(
+                                new PrintStatement(new HeapReadExpression(new VarExpr("v"))), new CompdStatement(
+                                new VarDeclStatement("a",new RefType(new RefType(new Integer()))), new CompdStatement(
+                                new NewStatement("a",new VarExpr("v")),new CompdStatement(
+                                new HeapWriteStatement("v",new ValueExpr(new intValue(30))),
+                                new PrintStatement(new ArtihmeticExpr(new HeapReadExpression(new HeapReadExpression( new VarExpr("a"))),new ValueExpr(new intValue(5)), '+'))))))));
+        SymbolsDict<String, myValue> dict = new SymbolsDict<String, myValue>();
+        FileTable<StringValue, BufferedReader> fileTable = new FileTable<StringValue, BufferedReader>();
+        HeapTable<myValue> heap = new HeapTable<myValue>();
+        OutList<myValue> lst = new OutList<myValue>();
+        executionStack<myStatement> stk = new executionStack<myStatement>();
+        return new PrgState(stk, dict, heap, fileTable, lst,  ex6);
     }
     static int print_menu(){
         Scanner keyboard = new Scanner(System.in);
@@ -146,21 +200,35 @@ public class main {
     }
 
     public static void main(String[] args){
-        String logFilePath = "C:\\Users\\Stefan Cira\\IdeaProjects\\logFile.txt";
+        String logFilePath = "C:\\Users\\paulu\\IdeaProjects\\logFile.txt";
         Repo r = new Repo(logFilePath);
         Repo r1 = new Repo(logFilePath);
         Repo r2 = new Repo(logFilePath);
+        Repo r3 = new Repo(logFilePath);
+        Repo r4 = new Repo(logFilePath);
+        Repo r5 = new Repo(logFilePath);
+
         controller c = new controller(r);
         controller c1 = new controller(r1);
         controller c2 = new controller(r2);
+        controller c3 = new controller(r3);
+        controller c4 = new controller(r3);
+        controller c5 = new controller(r4);
+
         r.add(p1());
         r1.add(p2());
         r2.add(p3());
+        //r3.add(p4());
+        r3.add(p5());
+        r4.add(p6());
+
         TextClass menu = new TextClass();
         menu.addCommand(new ExitCommand("0", "exit"));
-        menu.addCommand(new RunExample("1","example0", c));
-        menu.addCommand(new RunExample("2","example1", c1));
-        menu.addCommand(new RunExample("3","example2", c2));
+        menu.addCommand(new RunExample("1","int v; ;(v=2  ;Print{v })", c));
+        menu.addCommand(new RunExample("2","(int a; ;(int b; ;(a=2   + 3   * 5    ;(b=a  + 1   ;Print{b }))))", c1));
+        menu.addCommand(new RunExample("3","(boolean a; ;(int v; ;(a=true ;(If a  then v=2  else v=3  };Print{a }))))", c2));
+        menu.addCommand(new RunExample("4","(int v; ;(v=10  ;(while(v >0  )(Print{v };v=v  - 1   ))))", c4));
+        menu.addCommand(new RunExample("5","(Ref(int) v; ;(new(v,20  );(Print{rH(v )};(Ref(Ref(int)) a; ;(new(a,v );(wH(v,30  );Print{rH(rH(a )) + 5   }))))))", c5));
         menu.show();
 
     }

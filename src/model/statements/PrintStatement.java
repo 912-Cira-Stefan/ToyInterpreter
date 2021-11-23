@@ -27,7 +27,7 @@ public class PrintStatement implements myStatement{
     public PrgState execute(PrgState state) throws ExecuteException, ADTexception, EvalException {
         myList<myValue> out = state.getOutput();
         myDict<String, myValue> symTable = state.getSymbolsDict();
-        out.add(express1.eval(symTable));
+        out.add(express1.eval(symTable, state.getHeap()));
         return state;
     }
 }

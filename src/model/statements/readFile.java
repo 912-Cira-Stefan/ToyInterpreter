@@ -34,7 +34,7 @@ public class readFile implements myStatement{
             myType type = value.getType();
             if(type.equals(new Integer()))
             {
-                myValue expressionValue = expression.eval(symbolsTable);
+                myValue expressionValue = expression.eval(symbolsTable, state.getHeap());
                 myType expressionType = expressionValue.getType();
                 if(expressionType.equals(new StringType()))
                 {
