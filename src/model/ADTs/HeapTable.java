@@ -9,7 +9,7 @@ public class HeapTable<T> implements myHeap<T>{
 
     public HeapTable() {
         this.map = new HashMap<Integer,T>();
-        this.memory = 0;
+        this.memory = 1;
     }
 
     @Override

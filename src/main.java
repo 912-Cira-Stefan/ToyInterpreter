@@ -228,7 +228,7 @@ public class main {
         menu.addCommand(new RunExample("2","(int a; ;(int b; ;(a=2   + 3   * 5    ;(b=a  + 1   ;Print{b }))))", c1));
         menu.addCommand(new RunExample("3","(boolean a; ;(int v; ;(a=true ;(If a  then v=2  else v=3  };Print{a }))))", c2));
         menu.addCommand(new RunExample("4","(int v; ;(v=10  ;(while(v >0  )(Print{v };v=v  - 1   ))))", c4));
-        menu.addCommand(new RunExample("5","(Ref(int) v; ;(new(v,20  );(Print{rH(v )};(Ref(Ref(int)) a; ;(new(a,v );(wH(v,30  );Print{rH(rH(a )) + 5   }))))))", c5));
+        menu.addCommand(new RunExample("5","(Ref(int) v; ;(new(v,20  );(Print{rH(v )};(Ref(Ref(int)) a; ;(new(a,v );(wH(v,30  );Print{rH(rH(a )) + 5   })))))) ", c5));
         menu.show();
 
     }
